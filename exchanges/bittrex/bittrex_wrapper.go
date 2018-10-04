@@ -217,3 +217,12 @@ func (b *Bittrex) WithdrawFiatExchangeFunds(currency pair.CurrencyItem, amount f
 func (b *Bittrex) WithdrawFiatExchangeFundsToInternationalBank(currency pair.CurrencyItem, amount float64) (string, error) {
 	return "", errors.New("not yet implemented")
 }
+
+// GetFeeByType returns an estimate of fee based on type of transaction
+func (b *Bittrex) GetFeeByType(feeType string, currencyPair string, purchasePrice float64, amount float64) (float64, error) {
+	resp, err := b.GetFee(feeType, currencyPair, purchasePrice, amount)
+	if err != nil {
+		return resp, err
+	}
+	return resp, nil
+}

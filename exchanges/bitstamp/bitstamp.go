@@ -116,8 +116,8 @@ func (b *Bitstamp) Setup(exch config.ExchangeConfig) {
 	}
 }
 
-// GetFeeByType returns an estimate of fee based on type of transaction
-func (b *Bitstamp) GetFeeByType(feeType string, currencyPair string, purchasePrice float64, amount float64) float64 {
+// GetFee returns an estimate of fee based on type of transaction
+func (b *Bitstamp) GetFee(feeType string, currencyPair string, purchasePrice float64, amount float64) (float64, error) {
 	var fee float64
 
 	switch feeType {
@@ -142,9 +142,9 @@ func (b *Bitstamp) GetFeeByType(feeType string, currencyPair string, purchasePri
 		fee = 0
 	}
 	if fee < 0 {
-		return 0
+		fee = 0
 	}
-	return fee
+	return fee, nil
 }
 
 // getInternationalBankWithdrawalFee returns international withdrawal fee

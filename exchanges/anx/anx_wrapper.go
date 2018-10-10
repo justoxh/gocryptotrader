@@ -244,3 +244,12 @@ func (a *ANX) WithdrawFiatExchangeFunds(currency pair.CurrencyItem, amount float
 func (a *ANX) WithdrawFiatExchangeFundsToInternationalBank(currency pair.CurrencyItem, amount float64) (string, error) {
 	return "", errors.New("not yet implemented")
 }
+
+// GetFeeByType returns an estimate of fee based on type of transaction
+func (a *ANX) GetFeeByType(feeType string, currencyPair string, purchasePrice float64, amount float64, isTaker bool, isMaker bool) (float64, error) {
+	resp, err := a.GetFee(feeType, currencyPair, purchasePrice, amount, isTaker, isMaker)
+	if err != nil {
+		return resp, err
+	}
+	return resp, nil
+}

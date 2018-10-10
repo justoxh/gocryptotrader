@@ -1,5 +1,7 @@
 package btcc
 
+import "github.com/thrasher-/gocryptotrader/currency/symbol"
+
 // Response is the generalized response type
 type Response struct {
 	Ticker Ticker `json:"ticker"`
@@ -193,4 +195,16 @@ type WebsocketTicker struct {
 	Sell      float64 `json:"sell"`
 	Volume    float64 `json:"vol"`
 	Vwap      float64 `json:"vwap"`
+}
+
+// WithdrawalFees the large list of predefined withdrawal fees
+// Prone to change
+var WithdrawalFees = map[string]float64{
+	symbol.USD:  0.005,
+	symbol.USDT: 10,
+	symbol.BTC:  0.001,
+	symbol.ETH:  0.01,
+	symbol.BCH:  0.0001,
+	symbol.LTC:  0.001,
+	symbol.DASH: 0.002,
 }

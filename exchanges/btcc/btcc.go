@@ -11,6 +11,7 @@ import (
 
 	"github.com/thrasher-/gocryptotrader/common"
 	"github.com/thrasher-/gocryptotrader/config"
+	"github.com/thrasher-/gocryptotrader/currency/symbol"
 	"github.com/thrasher-/gocryptotrader/exchanges"
 	"github.com/thrasher-/gocryptotrader/exchanges/request"
 	"github.com/thrasher-/gocryptotrader/exchanges/ticker"
@@ -108,11 +109,6 @@ func (b *BTCC) Setup(exch config.ExchangeConfig) {
 			log.Fatal(err)
 		}
 	}
-}
-
-// GetFee returns the fees associated with transactions
-func (b *BTCC) GetFee() float64 {
-	return b.Fee
 }
 
 // GetTicker returns ticker information
@@ -638,4 +634,33 @@ func (b *BTCC) SendAuthenticatedHTTPRequest(method string, params []interface{})
 	headers["Json-Rpc-Tonce"] = b.Nonce.String()
 
 	return b.SendPayload("POST", apiURL, headers, strings.NewReader(string(data)), nil, true, b.Verbose)
+}
+
+// GetFee returns an estimate of fee based on type of transaction
+func (b *BTCC) GetFee(feeType string, currency string, purchasePrice float64, amount float64, isTaker bool, isMaker bool) (float64, error) {
+	var fee float64
+
+	switch feeType {
+	case exchange.CryptocurrencyWithdrawalFee:
+		fee = getCryptocurrencyWithdrawalFee(currency)
+	case exchange.InternationalBankWithdrawalFee:
+		fee = getInternationalBankWithdrawalFee(currency, amount)
+	}
+	if fee < 0 {
+		fee = 0
+	}
+	return fee, nil
+}
+
+func getCryptocurrencyWithdrawalFee(currency string) float64 {
+	return WithdrawalFees[currency]
+}
+
+func getInternationalBankWithdrawalFee(currency string, amount float64) float64 {
+	var fee float64
+
+	if currency == symbol.USD {
+		fee = WithdrawalFees[currency] * amount
+	}
+	return fee
 }

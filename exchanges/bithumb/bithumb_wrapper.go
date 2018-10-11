@@ -190,8 +190,8 @@ func (b *Bithumb) WithdrawFiatExchangeFundsToInternationalBank(currency pair.Cur
 }
 
 // GetFeeByType returns an estimate of fee based on type of transaction
-func (b *Bithumb) GetFeeByType(feeType string, currencyPair string, purchasePrice float64, amount float64, isTaker bool, isMaker bool) (float64, error) {
-	resp, err := b.GetFee(feeType, currencyPair, purchasePrice, amount, isTaker, isMaker)
+func (b *Bithumb) GetFeeByType(feeBuilder exchange.FeeBuilder) (float64, error) {
+	resp, err := b.GetFee(feeBuilder)
 	if err != nil {
 		return resp, err
 	}

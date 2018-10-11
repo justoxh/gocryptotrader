@@ -195,8 +195,8 @@ func (b *Bitmex) WithdrawExchangeFiatFundsToInternationalBank(currency pair.Curr
 }
 
 // GetFeeByType returns an estimate of fee based on type of transaction
-func (b *Bitmex) GetFeeByType(feeType string, currencyPair string, purchasePrice float64, amount float64, isTaker bool, isMaker bool) (float64, error) {
-	resp, err := b.GetFee(feeType, currencyPair, purchasePrice, amount, isTaker, isMaker)
+func (b *Bitmex) GetFeeByType(feeBuilder exchange.FeeBuilder) (float64, error) {
+	resp, err := b.GetFee(feeBuilder)
 	if err != nil {
 		return resp, err
 	}
